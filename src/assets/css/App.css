@@ -1,0 +1,92 @@
+.App-header {
+  background-color: #282c34;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+
+.App-link {
+  color: #61dafb;
+}
+
+button {
+  font-size: calc(10px + 2vmin);
+}
+
+html {
+  background-color: #282c34;
+}
+
+.Square {
+  display: flex;
+  flex: 1;
+  flex-basis: 30%;
+  border: 1px solid black;
+}
+
+.Header {
+  height: 50px;
+  background-color: transparent;
+}
+
+a,
+a:visited,
+a:hover,
+a:active {
+  color: #41b3a3;
+}
+
+.Pokemon-header {
+  display: flex;
+  flex-direction: column;
+  margin: 5px;
+  align-items: center;
+  justify-content: center;
+  color: #e4e4e4;
+}
+
+.PokemonBotton {
+  margin: 15px;
+}
+
+.Pokemon-info {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin: 5;
+  color: #e4e4e4;
+}
+a {
+  margin: 15px;
+  font-size: 25px;
+}
+
+.ToDo-Header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.Count {
+  font-size: 25px;
+  color: #e4e4e4;
+}
+
+.Counter {
+  display: flex;
+  flex-direction: row;
+}
+
+/* $roflinka: 20px;
+
+.Rofl {
+margin: $roflinka;
+&:nth-child(even){}
+}
+
+.Rofl:nth-child(even){
+margin: 50px;
+} */

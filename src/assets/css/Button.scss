@@ -1,0 +1,21 @@
+.ExpandableButtonContainer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: calc(100vh - 50px);
+  flex-wrap: wrap;
+}
+
+.ExpandableButton {
+  transition: transform 330ms ease-in-out;
+  width: 10%;
+  height: 30vh;
+  background-color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  &:hover {
+    transform: scale(1.35);
+  }
+  margin: 5px;
+}
