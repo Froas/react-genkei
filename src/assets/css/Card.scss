@@ -14,7 +14,7 @@ $shadow: #604ccf;
   font-family: "Roboto", sans-serif;
   color: $font;
   border-radius: 10px 10px 0px 0px;
-  box-shadow: 7px 7px 2px $shadow;
+  box-shadow: 7px 1px 3px $shadow;
   &:hover {
     animation: shake 1.5s;
   }
