@@ -10,12 +10,14 @@ $shadow: #604ccf;
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: $bg;
   flex-direction: column;
   font-family: "Roboto", sans-serif;
   color: $font;
   border-radius: 10px 10px 0px 0px;
   box-shadow: 7px 7px 2px $shadow;
+  &:hover {
+    animation: shake 1.5s;
+  }
 }
 
 .CardContainer {
@@ -111,3 +113,19 @@ body {
 input:not(:placeholder-shown) {
   border-color: hsl(0, 76%, 50%);
 }
+
+.CardImg{
+ 
+  height: 100px;
+}
+
+
+@keyframes shake {
+  0% { transform: skewX(-20deg); }
+  5% { transform: skewX(20deg); }
+  10% { transform: skewX(-20deg);}
+  15% { transform: skewX(20deg);}
+  20% { transform: skewX(0deg); }
+  100% { transform: skewX(0deg);}
+}
+

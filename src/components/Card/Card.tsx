@@ -6,63 +6,33 @@ import axios from "axios";
 
 type Rating = "0" | "1" | "2" | "3" | "4" | "5" | "6" | "7" | "8" | "9" | "10" | "";
 
-type Card = {
-  id: string;
-  rating: Rating;
-  title: string;
-  name: string;
-};
-
 type Anime = {
   title: string,
   img: string,
   name: string
+  id: string
 }
 
-const MKCard: React.FC<Card> = (props): JSX.Element => {
+const MKCard: React.FC<Anime> = ({name, title, img, id}): JSX.Element => {
   return (
     <div className="Card">
       <h1>
-        {props.name.length > 10 ? props.name.slice(0, 9) + "..." : props.name}
+        {title.length > 10 ? title.slice(0, 9) + "...": title}
+
       </h1>
       <p>
-        {props.title.length > 10
-          ? props.title.slice(0, 9) + "..."
-          : props.title}
+        {name.length > 10 ? name.slice(0, 9) + "..." : name}
       </p>
-      <p>{props.rating + "/10"}</p>
+      <img src={img} className="CardImg"/>
     </div>
   );
 };
 
 const Card: React.FC = () => {
-  const [search, setSearch] = useState<string>("");
-  const [img, setImg] = useState<string>("")
-  const [mkCard, setMkCard] = useState<Card>({
-    id: uuidv4(),
-    rating: "",
-    title: "",
-    name: "",
-  });
-
-  const data: Card[] = [
-    { id: uuidv4(), rating: "8", title: "Title", name: "Anime" },
-    { id: uuidv4(), rating: "0", title: "Huynya", name: "Hanime" },
-    { id: uuidv4(), rating: "1", title: "Netu", name: "Hleb" },
-    { id: uuidv4(), rating: "5", title: "Norm", name: "One Peace" },
-    { id: uuidv4(), rating: "10", title: "Norm", name: "Bleach" },
-    { id: uuidv4(), rating: "0", title: "Pizdes", name: "Naruto" },
-  ];
-
-  const [datas, setDatas] = useState<Card[]>(data);
-
-  const filteredCards = R.filter(
-    (card) =>
-      card.name.includes(search) ||
-      card.rating.includes(search) ||
-      card.title.includes(search),
-    datas
-  );
+  const [anime, setAnime] = useState<Anime[]>([])
+  const [search, setSearch] = useState<string>("")
+  const [animeName, setAnimeName] = useState<string>("")
+  const [animeTitle, setAnimeTitle] = useState<string>("")
 
 
   useEffect(() => {
@@ -75,19 +45,24 @@ const Card: React.FC = () => {
         })
         .then((res) => {
           const data = res.data;
-          const filter = R.filter((anime: Anime) => 
-            anime.title.includes(search),
-            data
-          )
-          setImg(filter[0].img)
-          console.log(filter)
+          setAnime(data)
         })
         .catch((err) => {
           console.log(err);
         });
     };
     response();
-  }, [search]);
+  }, []);
+
+  console.log(anime)
+
+  const filteredCards = R.filter(
+    (card) =>
+      card.name.includes(search) ||
+      // card.rating.includes(search) ||
+      card.title.includes(search),
+    anime
+  );
 
 
   return (
@@ -104,14 +79,16 @@ const Card: React.FC = () => {
           className="CreateCard"
           onSubmit={(e) => (
             e.preventDefault(),
-            mkCard.name.length > 0 && mkCard.title.length > 0
-              ? (setDatas(R.concat([mkCard], datas)),
-                setMkCard({
-                  id: uuidv4(),
-                  rating: "0",
-                  title: "",
-                  name: "",
-                }))
+            animeName.length > 0 && animeTitle.length > 0 
+              ? ((setAnime(R.concat(anime,[
+                {name: animeName, 
+                  title: animeTitle, 
+                  id: uuidv4(), 
+                  img: ""}]))),
+               console.log(anime),
+               setAnimeName(""),
+               setAnimeTitle("")
+              )
               : console.log("enter name")
           )}
         >
@@ -119,29 +96,25 @@ const Card: React.FC = () => {
             className="InputCard"
             placeholder="Name"
             type="text"
-            value={mkCard.name}
-            onChange={(e) => setMkCard(R.assoc("name", e.target.value, mkCard))}
+            value={animeName}
+            onChange = {(e: React.FormEvent<HTMLInputElement>) => 
+              {setAnimeName(e.currentTarget.value)}}
           />
           <input
             className="InputCard"
             placeholder="Title"
             type="text"
-            value={mkCard.title}
-            onChange={(e) =>
-              setMkCard(R.assoc("title", e.target.value, mkCard))
-            }
+            value={animeTitle}
+            onChange = {(e: React.FormEvent<HTMLInputElement>) => 
+              {setAnimeTitle(e.currentTarget.value)}}
           />
-          <input
+          {/* <input
             className="InputCard"
             placeholder="Rating"
             type="text"
-            value={mkCard.rating}
-            onChange={(e) =>
-                parseInt(e.target.value) >= 0
-                ? setMkCard(R.assoc("rating", e.target.value as Rating, mkCard))
-                : (console.log("write a number"), setMkCard(R.assoc("rating", "" as Rating, mkCard)))
-            }
-          />
+            value=""
+            // onChange={}
+          /> */}
           <button type="submit" className="ButtonAdd">
             Add
           </button>
@@ -152,17 +125,18 @@ const Card: React.FC = () => {
           (curr) => (
             <div className="CardsContainer">
               <MKCard
-                id={curr.id}
-                key={curr.id + curr.rating}
+                id={uuidv4()}
+                key={uuidv4()}
                 name={curr.name}
-                rating={curr.rating}
+                // rating={curr.rating}
                 title={curr.title}
+                img={curr.img}
               />
               <button
                 className="ButtonCard"
                 type="submit"
                 onClick={() =>
-                  setDatas(R.filter((data) => data.id !== curr.id, datas))
+                  setAnime(R.filter((data) => data.img !== curr.img, anime))
                 }
               >
                 Delete
@@ -171,10 +145,16 @@ const Card: React.FC = () => {
           ),
           filteredCards
         )}
-        <img src={img}/>
       </div>
     </div>
   );
 };
 
 export default Card;
+
+
+// 1. исправить код 
+// 2. Использовать массив Аниме в логике 
+// 3. Поставить на фон карточки картинку(React.CSSProperties style={})
+
+
