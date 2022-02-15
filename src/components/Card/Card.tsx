@@ -3,30 +3,8 @@ import "../../assets/css/Card.scss";
 import * as R from "ramda";
 import { v4 as uuidv4 } from "uuid";
 import axios from "axios";
-
-type Rating = "0" | "1" | "2" | "3" | "4" | "5" | "6" | "7" | "8" | "9" | "10" | "";
-
-type Anime = {
-  title: string,
-  img: string,
-  name: string
-  id: string
-}
-
-const MKCard: React.FC<Anime> = ({name, title, img, id}): JSX.Element => {
-  return (
-    <div className="Card">
-      <h1>
-        {title.length > 10 ? title.slice(0, 9) + "...": title}
-
-      </h1>
-      <p>
-        {name.length > 10 ? name.slice(0, 9) + "..." : name}
-      </p>
-      <img src={img} className="CardImg"/>
-    </div>
-  );
-};
+import { MKCard } from "./MkCard"
+import type { Anime } from "./TypesCard";
 
 const Card: React.FC = () => {
   const [anime, setAnime] = useState<Anime[]>([])
@@ -54,7 +32,6 @@ const Card: React.FC = () => {
     response();
   }, []);
 
-  console.log(anime)
 
   const filteredCards = R.filter(
     (card) =>
@@ -96,17 +73,17 @@ const Card: React.FC = () => {
             className="InputCard"
             placeholder="Name"
             type="text"
-            value={animeName}
+            value={animeTitle}
             onChange = {(e: React.FormEvent<HTMLInputElement>) => 
-              {setAnimeName(e.currentTarget.value)}}
+              {setAnimeTitle(e.currentTarget.value)}}
           />
           <input
             className="InputCard"
             placeholder="Title"
             type="text"
-            value={animeTitle}
+            value={animeName}
             onChange = {(e: React.FormEvent<HTMLInputElement>) => 
-              {setAnimeTitle(e.currentTarget.value)}}
+              {setAnimeName(e.currentTarget.value)}}
           />
           {/* <input
             className="InputCard"
@@ -153,8 +130,6 @@ const Card: React.FC = () => {
 export default Card;
 
 
-// 1. исправить код 
-// 2. Использовать массив Аниме в логике 
-// 3. Поставить на фон карточки картинку(React.CSSProperties style={})
+
 
 
