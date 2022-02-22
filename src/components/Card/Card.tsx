@@ -6,16 +6,19 @@ import axios from "axios";
 import { MKCard } from "./MkCard";
 import { CardForm } from "./CardForm";
 import { AnimeWithRating, Rating } from "./TypesCard";
+import { useDispatch } from "react-redux";
+import { setAnime, selectPgSlice, setSearch } from "./cardSlice";
+import { use } from "../../utils";
+import { Link } from "react-router-dom";
 
-const Card: React.FC = () => {
-  const [anime, setAnime] = useState<AnimeWithRating[]>([]);
-  const [search, setSearch] = useState<string>("");
-  const [animeName, setAnimeName] = useState<string>("");
-  const [animeTitle, setAnimeTitle] = useState<string>("");
-  const [animeRating, setAnimeRating] = useState<Rating>("");
+export const Card: React.FC = () => {
+  const dispatch = useDispatch();
+  const data = use(selectPgSlice);
+ 
 
   const randomNumber = () => Math.floor(Math.random() * 10).toString();
-  console.log(randomNumber());
+  const animeToURL = (title: string) =>
+    title.toLocaleLowerCase().split(" ").join("-");
 
   useEffect(() => {
     const response = async () => {
@@ -29,14 +32,11 @@ const Card: React.FC = () => {
         })
         .then((res) => {
           const data = res.data;
-          const dataWithRating = R.map(
-            (curr) => ({ ...curr, rating: randomNumber() }),
+          const anime: AnimeWithRating[] = R.map(
+            (curr) => ({ ...curr, rating: randomNumber(), id: uuidv4() }),
             data
           );
-          const dataWithId = R.map((curr) => ({ ...curr, id: uuidv4() }), dataWithRating);
-
-          setAnime(dataWithId);
-          console.log(dataWithId);
+          dispatch(setAnime(anime));
         })
         .catch((err) => {
           console.log(err);
@@ -47,35 +47,28 @@ const Card: React.FC = () => {
 
   const filteredCards = R.filter(
     (card) =>
-      card.name.includes(search) ||
-      card.rating.includes(search) ||
-      card.title.includes(search),
-    anime
+      card.name.includes(data.search) ||
+      card.rating.includes(data.search) ||
+      card.title.includes(data.search),
+    data.animeData
   );
-
   return (
     <div>
       <div className="SearchConteiner">
         <input
           className="SearchCard"
           placeholder="Search"
-          onChange={(e) => setSearch(e.target.value)}
+          onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+            dispatch(setSearch(e.target.value))
+          }
         />
       </div>
-      <CardForm
-        anime={anime}
-        animeName={animeName}
-        animeTitle={animeTitle}
-        setAnime={setAnime}
-        setAnimeName={setAnimeName}
-        setAnimeTitle={setAnimeTitle}
-        animeRating={animeRating}
-        setAnimeRating={setAnimeRating}
-      />
+      <CardForm/>
       <div className="CardContainer">
         {R.map(
           (curr) => (
             <div className="CardsContainer" key={curr.id}>
+            <Link to={`${animeToURL(curr.title)}`} className="CardLink">
               <MKCard
                 id={curr.id}
                 name={curr.name}
@@ -83,11 +76,16 @@ const Card: React.FC = () => {
                 title={curr.title}
                 img={curr.img}
               />
+              </Link>
               <button
                 className="ButtonCard"
                 type="submit"
                 onClick={() =>
-                  setAnime(R.filter((data) => data.img !== curr.img, anime))
+                  dispatch(
+                    setAnime(
+                      R.filter((data) => data.img !== curr.img, data.animeData)
+                    )
+                  )
                 }
               >
                 Delete

@@ -1,31 +1,46 @@
-import React from "react";
-import { useState } from "react";
+import { useDispatch } from "react-redux";
 import { v4 as uuidv4 } from "uuid";
-import { CardFormProps, Rating } from "./TypesCard";
-import * as R from "ramda";
+import { Rating } from "./TypesCard";
+import {
+  setAnime,
+  selectPgSlice,
+  setRating,
+  setName,
+  setTitle,
+} from "./cardSlice";
+import { use } from "../../utils";
+import * as R from "ramda"
 
-export const CardForm: React.FC<CardFormProps> = (props) => {
+export const CardForm: React.FC = () => {
+  const data = use(selectPgSlice);
+  const dispatch = useDispatch();
+
   return (
     <div>
       <form
         className="CreateCard"
         onSubmit={(e) => (
           e.preventDefault(),
-          props.animeName.length > 0 && props.animeTitle.length > 0
-            ? (props.setAnime(
-                R.concat(props.anime, [
+          data.name.length > 0 && data.title.length > 0
+            ? (dispatch(
+              setAnime(
+                  R.concat(
+                    data.animeData,
+                  [
                   {
-                    name: props.animeName,
-                    title: props.animeTitle,
+                    name: data.name,
+                    title: data.title,
                     id: uuidv4(),
                     img: "",
-                    rating: props.animeRating
+                    rating: data.rating,
                   },
                 ])
+                
+                )
               ),
-              props.setAnimeName(""),
-              props.setAnimeTitle(""),
-              props.setAnimeRating(""))
+              dispatch(setName("")),
+              dispatch(setTitle("")),
+              dispatch(setRating("")))
             : {}
         )}
       >
@@ -33,27 +48,27 @@ export const CardForm: React.FC<CardFormProps> = (props) => {
           className="InputCard"
           placeholder="Name"
           type="text"
-          value={props.animeTitle}
+          value={data.title}
           onChange={(e: React.FormEvent<HTMLInputElement>) => {
-            props.setAnimeTitle(e.currentTarget.value);
+            dispatch(setTitle(e.currentTarget.value));
           }}
         />
         <input
           className="InputCard"
           placeholder="Title"
           type="text"
-          value={props.animeName}
+          value={data.name}
           onChange={(e: React.FormEvent<HTMLInputElement>) => {
-            props.setAnimeName(e.currentTarget.value);
+            dispatch(setName(e.currentTarget.value));
           }}
         />
         <input
           className="InputCard"
           placeholder="Rating"
           type="text"
-          value={props.animeRating}
+          value={data.rating}
           onChange={(e: React.FormEvent<HTMLInputElement>) => {
-            props.setAnimeRating(e.currentTarget.value as Rating);
+            dispatch(setRating(e.currentTarget.value as Rating));
           }}
         />
         <button type="submit" className="ButtonAdd">

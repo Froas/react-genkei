@@ -1,6 +1,9 @@
 import React from "react";
 import { useState } from "react";
+import { useDispatch } from "react-redux";
 import { v4 as uuidv4 } from "uuid";
+import { use } from "../../utils"
+import { setTitle, setText, selectPgSlice, addTodoItem } from "../ReduxPG/reduxPgSlice"
 
 type TodoItem = {
   title: string;
@@ -17,25 +20,27 @@ const MkTodo: React.FC<TodoItem> = (props): JSX.Element => {
 };
 
 const Todo: React.FC = () => {
-  const [title, setTitle] = useState<string>("");
-  const [text, setText] = useState<string>("");
-  const [todoItems, setTodoItems] = useState<[string, string][]>([]);
+  const reduxData = use(selectPgSlice)
+  const dispatch = useDispatch()
+  const todoItems = reduxData.todoItems
+
+ 
   return (
     <div className="ToDo-Header">
       <h1>To Do</h1>
       <input
         placeholder="type title"
         onChange={(e: React.FormEvent<HTMLInputElement>) =>
-          setTitle(e.currentTarget.value)
+          dispatch(setTitle(e.currentTarget.value))
         }
       />
       <input
         placeholder="type text"
         onChange={(e: React.FormEvent<HTMLInputElement>) =>
-          setText(e.currentTarget.value)
+          dispatch(setText(e.currentTarget.value))
         }
       />
-      <button onClick={() => setTodoItems(todoItems.concat([[text, title]]))}>
+      <button onClick={() => dispatch(addTodoItem([reduxData.title, reduxData.text]))}>
         {" "}
         Create a porst{" "}
       </button>

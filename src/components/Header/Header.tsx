@@ -1,5 +1,5 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, Outlet } from "react-router-dom";
 import "../../assets/css/App.css";
 
 export const Header = () => {
@@ -12,6 +12,8 @@ export const Header = () => {
       <Link to="/blog">Blog</Link>
       <Link to="/button">Button</Link>
       <Link to="/card">Card</Link>
+      <Link to="/redux-pg">Redux pg</Link>
+      <Outlet/>
     </div>
   );
 };
