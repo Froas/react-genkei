@@ -9,16 +9,15 @@ import { AnimeWithRating, Rating } from "./TypesCard";
 import { useDispatch } from "react-redux";
 import { setAnime, selectPgSlice, setSearch } from "./cardSlice";
 import { use } from "../../utils";
-import { Link } from "react-router-dom";
+import { Link, Outlet } from "react-router-dom";
 
 export const Card: React.FC = () => {
   const dispatch = useDispatch();
   const data = use(selectPgSlice);
- 
 
   const randomNumber = () => Math.floor(Math.random() * 10).toString();
   const animeToURL = (title: string) =>
-    title.toLocaleLowerCase().split(" ").join("-");
+    title.toLocaleLowerCase().split(" ").join("-")
 
   useEffect(() => {
     const response = async () => {
@@ -63,19 +62,19 @@ export const Card: React.FC = () => {
           }
         />
       </div>
-      <CardForm/>
+      <CardForm />
       <div className="CardContainer">
         {R.map(
           (curr) => (
             <div className="CardsContainer" key={curr.id}>
-            <Link to={`${animeToURL(curr.title)}`} className="CardLink">
-              <MKCard
-                id={curr.id}
-                name={curr.name}
-                rating={curr.rating}
-                title={curr.title}
-                img={curr.img}
-              />
+              <Link to={animeToURL(encodeURI(curr.title))} className="CardLink">
+                <MKCard
+                  id={curr.id}
+                  name={curr.name}
+                  rating={curr.rating}
+                  title={curr.title}
+                  img={curr.img}
+                />
               </Link>
               <button
                 className="ButtonCard"
@@ -90,11 +89,13 @@ export const Card: React.FC = () => {
               >
                 Delete
               </button>
+
             </div>
           ),
           filteredCards
         )}
       </div>
+
     </div>
   );
 };

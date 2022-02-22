@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { AppSelector, selector } from "../../utils";
-import * as R from "ramda";
+import { v4 as uuidv4 } from "uuid";
 import { AnimeWithRating, Rating } from "./TypesCard";
 
 type CardSlice = {
@@ -18,11 +18,11 @@ const initialState: CardSlice = {
   rating: "",
   animeData: [
     {
-      title: "",
-      img: "",
-      name: "",
-      id: "",
-      rating: "",
+      title: "Kimetsu no Yaiba: Yuukaku-hen",
+      img: "https://cdn.myanimelist.net/images/anime/1338/111945l.jpg",
+      name: "top",
+      id: uuidv4(),
+      rating: "10",
     },
   ],
 };

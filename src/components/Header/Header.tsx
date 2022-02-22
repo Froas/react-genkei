@@ -4,7 +4,7 @@ import "../../assets/css/App.css";
 
 export const Header = () => {
   return (
-    <div className="Header">
+    <nav className="Header">
       <Link to="/">Home</Link>
       <Link to="/counter">Counter</Link>
       <Link to="/todo">To Do</Link>
@@ -14,6 +14,6 @@ export const Header = () => {
       <Link to="/card">Card</Link>
       <Link to="/redux-pg">Redux pg</Link>
       <Outlet/>
-    </div>
+    </nav>
   );
 };
